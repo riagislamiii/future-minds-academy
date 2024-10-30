@@ -1,0 +1,17 @@
+h1 {
+    color: rgb(255, 255, 255); 
+    text-align: center; 
+}
+
+h2 {
+    color: rgb(111, 247, 143);
+    font-weight: lighter; 
+    text-align: center; 
+    border: 3px solid black; 
+}
+
+p {
+    font-family: Arial, sans-serif;
+    line-height: 1.5; 
+    margin-bottom: 15px;
+}

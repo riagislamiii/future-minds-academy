@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visibility&Display</title>
+    <style>
+        body{font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url(snow-night.png);}
+        
+        .title {
+            width: fit-content;
+            background-color: rgb(37, 31, 64);
+            padding: 20px;
+            border: 5px solid rgb(0, 0, 0);
+            /*       T    R    B    L */
+            margin: 0 auto 30px auto;
+            color:white;
+
+        }
+h1{
+    background-color: violet;
+}
+        h2{
+            background-color: black;
+            color: yellow;
+        }
+
+        .wrapper {
+            width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .p1 {
+            float: left;
+            width: 200px;
+        }
+
+        .p2 {
+            float: right;
+            width: 200px;
+        }
+        .hero{background-image: url(snow-night.png);
+            background-size:cover ;
+            color:white;
+            height: 600px
+        }
+        .hero h1{color: white;
+        padding: 150px 0px 20px 0px;}
+        button{
+            padding: 15px;
+            width: 200px;
+            background-color: rgb(18, 16, 27);
+            color: white;
+            border-radius:30px ;
+            transition: 0.5s;
+        }
+        button:hover{
+            background-color: rgb(70, 65, 157);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1 class="title">Visibility vs Display</h1>
+        <div><img src="fma-logo.png" alt=""></div>
+
+        <p class="p1">Lorem ipsum dolor sit amet consectetur adipisicing elit. Beatae error sequi officia, odio
+            cupiditate facere
+            animi
+            laborum perferendis aspernatur est nulla deleniti, reiciendis praesentium qui corrupti exercitationem
+            mollitia
+            porro ex.
+
+        </p>
+        <p class="p2">Lorem ipsum dolor sit amet consectetur adipisicing elit. Harum inventore, labore temporibus nobis
+            odio, sunt nihil cum iure, accusantium porro placeat assumenda ipsum sapiente? Nulla ab deserunt culpa
+            repellendus vitae.</p>
+        <div style="clear: both;"></div>
+        <h2>Snow night</h2>
+        <div class="hero">
+            
+            <h1>Welcome to a beautiful night!</h1>
+            <p>A magical night somewhere in the world</p>
+            <div>
+                <button>Get Started</button>
+                
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>

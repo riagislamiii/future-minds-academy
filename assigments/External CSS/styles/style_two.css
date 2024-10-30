@@ -1,0 +1,16 @@
+
+h1 {
+    background-color: rgb(98, 167, 118); 
+}
+
+h2 {
+    background-color: rgb(53, 72, 49); 
+    padding: 5px; 
+    text-align: center; 
+}
+
+p {
+    background-color: white; 
+    padding: 10px; 
+    color: green;
+}

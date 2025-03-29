@@ -1,0 +1,38 @@
+style2.css
+
+body {
+    padding: 0%; 
+    color: aliceblue;
+}
+
+.wrapper {
+    background-color: rgb(43, 104, 65);
+    padding:20px;
+
+
+}
+.wrapper div{
+    float:left;
+    padding: 20px;
+    border: 1px;
+    margin:20px;
+}
+.wrapper div hover{
+    background-color: black;
+    color: white;
+}
+.one{
+    background-color: rgb(94, 66, 121);
+    
+}
+.two{
+    background-color: blueviolet;
+ 
+}
+.three{
+  
+}
+.four{
+    background-color: rgb(56, 26, 84);
+}
+

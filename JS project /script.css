@@ -1,0 +1,240 @@
+const defaultSettings = {
+    backgroundColor: 'white',
+    showSidebarImage: true,
+    sidebarImage: 'Images/sidebar-1.jpg',
+    collapsed: false,
+    darkMode: false,
+}; //Default qka jon
+
+let settings = loadSettings();
+
+function loadSettings() {
+    try {
+        const saved = localStorage.getItem('settings');
+        return saved ? JSON.parse(saved) : { ...defaultSettings };
+    } catch (e) {
+        console.error("Failed to load settings", e);
+        return { ...defaultSettings };
+    }
+}
+
+function saveAndApply() {
+    localStorage.setItem("settings", JSON.stringify(settings));
+    applySettings();
+}
+
+function applySettings() {
+    const aside = document.querySelector('aside');
+//save in local storage
+  
+
+    if (settings.showSidebarImage && settings.sidebarImage) {
+        aside.style.backgroundImage = `url(${settings.sidebarImage})`;
+        aside.style.backgroundColor = "rgba(0, 0, 0, 0.5)";
+        aside.style.backgroundBlendMode = "overlay";
+    } else {
+        aside.style.backgroundImage = "none";
+        aside.style.backgroundColor = settings.backgroundColor;
+        aside.style.backgroundBlendMode = "normal";
+    }
+
+    const color = settings.textColor || (settings.showSidebarImage ? "white" : "black");
+    aside.querySelectorAll('a, span, p, li, .nav-link, .submenu li, .expandable-header, .logo-text') //ngjyrat te texti
+        .forEach(el => el.style.color = color);
+
+    aside.classList.toggle('collapsed', settings.collapsed);
+    document.body.classList.toggle("dark-mode", settings.darkMode);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    applySettings();
+    renderNotifications();
+
+    const darkModeToggle = document.getElementById("darkMode");
+    const darkModeLabel = darkModeToggle?.closest(".toggle-wrapper")?.querySelector("span");
+    if (darkModeToggle) {
+        darkModeToggle.checked = settings.darkMode;
+        document.body.classList.toggle("dark-mode", settings.darkMode);
+        if (darkModeLabel) darkModeLabel.textContent = settings.darkMode ? "Dark Mode On" : "Dark Mode Off";
+
+        darkModeToggle.addEventListener("change", (e) => {
+            settings.darkMode = e.target.checked;
+            document.body.classList.toggle("dark-mode", settings.darkMode);
+            if (darkModeLabel) darkModeLabel.textContent = settings.darkMode ? "Dark Mode On" : "Dark Mode Off";
+            saveAndApply();
+        });
+    }
+//dark mode 
+    document.querySelectorAll(".spanicons1 .material-symbols-outlined[title='Delete']").forEach(deleteIcon => {
+        deleteIcon.addEventListener("click", (e) => {
+            const card = e.target.closest(".card");
+            if (card) {
+                card.remove();
+            }
+        });
+    });//delete
+
+    document.querySelectorAll(".spanicons1 .material-symbols-outlined[title='Edit']").forEach(editIcon => {
+        editIcon.addEventListener("click", (e) => {
+            const card = e.target.closest(".card");
+            if (card) {
+                const title = card.querySelector(".cardtext p:nth-child(1)");
+                const description = card.querySelector(".cardtext p:nth-child(2)");
+                const price = card.querySelector(".lowerdiv2 p");
+                const location = card.querySelector(".lowerdivright p");
+
+                [title, description, price, location].forEach(element => {
+                    element.contentEditable = "true";
+                    element.style.border = "1px dashed #ccc";
+                    element.focus();
+                });
+
+                [title, description, price, location].forEach(element => {
+                    element.addEventListener("blur", () => {
+                        element.contentEditable = "false";
+                        element.style.border = "none";
+                    });
+                }); //edit 
+            }
+        });
+    });
+
+    document.querySelectorAll(".preview-img").forEach(img => {
+        img.addEventListener("click", () => {
+            const aside = document.querySelector("aside");
+            const newImage = img.getAttribute("data-img");
+            aside.style.backgroundImage = `url(${newImage})`;
+            settings.sidebarImage = newImage;
+            settings.showSidebarImage = true;
+            saveAndApply();
+        });
+    });
+}); //image settings
+
+document.getElementById('toggleAside')?.addEventListener('click', () => {
+    const aside = document.querySelector('aside');
+    aside.classList.toggle('collapsed');
+    settings.collapsed = aside.classList.contains('collapsed');
+    saveAndApply();
+});
+
+document.querySelectorAll('.expandable-header').forEach(header => {
+    header.addEventListener('click', () => {
+        const parent = header.closest('.expandable');
+        const submenu = parent?.querySelector('.submenu');
+        const arrow = header.querySelector('.material-symbols-outlined:last-child');
+
+        submenu?.classList.toggle('active');
+        arrow?.classList.toggle('rotated');
+    });
+}); //submenu expandable 
+
+document.querySelectorAll(".filter-circle").forEach(circle => {
+    circle.addEventListener("click", () => {
+        const color = circle.dataset.color;
+        settings.sidebarColor = color;
+        settings.textColor = color;
+        saveAndApply();
+    });
+});//sidebar text color
+
+document.querySelectorAll(".bg-option").forEach(option => {
+    option.addEventListener("click", () => {
+        settings.backgroundColor = option.dataset.bg;
+        settings.showSidebarImage = false;
+        settings.sidebarImage = '';
+        saveAndApply();
+    });
+});
+
+document.getElementById("sidebarImageToggle")?.addEventListener("change", (e) => {
+    settings.showSidebarImage = e.target.checked;
+    if (e.target.checked && !settings.sidebarImage) {
+        settings.sidebarImage = defaultSettings.sidebarImage;
+    }
+    saveAndApply();
+}); //sidear image toggle
+
+document.querySelectorAll(".preview-img").forEach(img => {
+    img.addEventListener("click", () => {
+        settings.showSidebarImage = true;
+        settings.sidebarImage = img.src;
+        saveAndApply();
+    });
+});
+//images
+document.getElementById("sidebar-settings-toggle")?.addEventListener("click", () => {
+    document.getElementById("sidebar-settings-panel")?.classList.toggle("visible");
+});
+
+function loadNotifications() {
+    try {
+        let notifs = JSON.parse(localStorage.getItem("notifications"));
+        if (!Array.isArray(notifs) || notifs.length === 0) {
+            notifs = [
+                'John Doe sent you a message',
+                'Someone viewed your profile',
+                'John Doe sent you a message',
+                'Someone viewed your profile',
+                'Another notification',
+            ];
+            localStorage.setItem("notifications", JSON.stringify(notifs));
+        }
+        return notifs;
+    } catch (e) {
+        console.error("Failed to load notifications", e);
+        return [];
+    }
+}
+//notifications
+
+function renderNotifications() {
+    const list = document.getElementById("notificationList");
+    const countSpan = document.getElementById("notificationCount");
+    const notifications = loadNotifications();
+
+    if (!list || !countSpan) return;
+
+    list.innerHTML = "";
+    notifications.forEach(n => {
+        const li = document.createElement("li");
+        li.textContent = n;
+        list.appendChild(li);
+    });
+
+    countSpan.textContent = notifications.length;
+}
+
+document.getElementById("notificationBell")?.addEventListener("click", () => {
+    const list = document.getElementById("notificationList");
+    if (list) {
+        list.style.display = list.style.display === "none" ? "block" : "none";
+    }
+});
+
+const sampleListings = [
+    {
+        id: 1,
+        title: "Cozy 5 Stars Apartment",
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ipsum commodi ducimus error.",
+        price: "$899/night",
+        location: "Barcelona, Spain",
+        imageUrl: "Images/card-1.jpeg"
+    },
+    {
+        id: 2,
+        title: "Office Studio",
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ipsum commodi ducimus error.",
+        price: "$1,119/night",
+        location: "London, UK",
+        imageUrl: "Images/card-2.jpeg"
+    },
+    {
+        id: 3,
+        title: "Beautiful Castle",
+        description: "Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere ipsum commodi ducimus error.",
+        price: "$459/night",
+        location: "Milan, Italy",
+        imageUrl: "Images/card-3.jpeg"
+    }
+];
